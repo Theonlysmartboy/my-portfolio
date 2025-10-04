@@ -3,6 +3,12 @@ import React, { useState } from "react";
 export default function App() {
     const [currentPage, setCurrentPage] = useState("About");
     const [activeCategory, setActiveCategory] = useState("All");
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+    });
 
     const pages = ["About", "Skills", "Experience", "Projects", "Contact"];
 
@@ -69,6 +75,60 @@ export default function App() {
         ? projects
         : projects.filter(project => project.category === activeCategory);
 
+    // Contact functionality
+    const phoneNumber = "+254702293572";
+    const emailAddress = "mr.josephodhiambo@proton.me";
+
+    const handleWhatsAppClick = () => {
+        const message = "Hello Joseph, I came across your portfolio and would like to connect with you.";
+        const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    };
+
+    const handleEmailClick = () => {
+        const subject = "Interest in Your Services";
+        const body = "Hello Joseph,\n\nI came across your portfolio and would like to discuss potential opportunities.";
+        const mailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailtoUrl;
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        // Send via WhatsApp
+        const whatsappMessage = `New Contact Form Submission:\n\nName: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\nMessage: ${formData.message}`;
+        const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`;
+
+        // Send via Email
+        const emailSubject = `Portfolio Contact: ${formData.subject}`;
+        const emailBody = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`;
+        const mailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+        // Open both (user can choose)
+        window.open(whatsappUrl, '_blank');
+        setTimeout(() => {
+            window.location.href = mailtoUrl;
+        }, 1000);
+
+        // Reset form
+        setFormData({
+            name: "",
+            email: "",
+            subject: "",
+            message: ""
+        });
+
+        alert("Thank you for your message! You'll be redirected to WhatsApp and email to send your message.");
+    };
+
     return (
         <div className="flex min-h-screen font-sans bg-indigo-950 text-white">
             {/* Sidebar */}
@@ -80,8 +140,18 @@ export default function App() {
                 <p className="text-yellow-600 mb-4 text-center">Full-Stack Developer</p>
 
                 <div className="flex flex-col gap-3 mb-6 text-center text-white">
-                    <p>📧 mr.josephodhiambo@proton.me</p>
-                    <p>📱 +254 702 293 572</p>
+                    <button
+                        onClick={handleEmailClick}
+                        className="hover:text-yellow-400 transition cursor-pointer flex items-center justify-center gap-2"
+                    >
+                        📧 {emailAddress}
+                    </button>
+                    <button
+                        onClick={handleWhatsAppClick}
+                        className="hover:text-yellow-400 transition cursor-pointer flex items-center justify-center gap-2"
+                    >
+                        📱 {phoneNumber}
+                    </button>
                 </div>
 
                 <div className="mt-auto flex gap-4">
@@ -214,7 +284,7 @@ export default function App() {
                                         key={project.id}
                                         className="bg-indigo-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105"
                                     >
-                                        {/* Project Image with Debug */}
+                                        {/* Project Image */}
                                         <div className="h-48 bg-indigo-700 relative overflow-hidden">
                                             <img
                                                 src={project.image}
@@ -276,9 +346,133 @@ export default function App() {
                     )}
 
                     {currentPage === "Contact" && (
-                        <section className="bg-indigo-800 rounded-xl p-8 shadow-lg">
-                            <h3 className="text-4xl font-bold mb-4 text-yellow-400">Contact Me</h3>
-                            <p className="text-white mb-4">📧 mr.josephodhiambo@proton.me | 📱 +254 702 293 572</p>
+                        <section className="space-y-8">
+                            <div className="text-center">
+                                <h3 className="text-4xl font-bold mb-4 text-yellow-400">Let's Work Together</h3>
+                                <p className="text-white text-lg max-w-2xl mx-auto">
+                                    Ready to bring your next project to life? Get in touch and let's discuss how we can create something amazing together.
+                                </p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-8">
+                                {/* Contact Information */}
+                                <div className="bg-indigo-800 rounded-xl p-8 shadow-lg">
+                                    <h4 className="text-2xl font-bold mb-6 text-yellow-400">Get In Touch</h4>
+
+                                    <div className="space-y-6">
+                                        <div className="flex items-center gap-4 p-4 bg-indigo-700 rounded-lg hover:bg-indigo-600 transition cursor-pointer"
+                                            onClick={handleEmailClick}>
+                                            <div className="text-2xl">📧</div>
+                                            <div>
+                                                <p className="font-semibold">Email</p>
+                                                <p className="text-sm">{emailAddress}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-4 p-4 bg-indigo-700 rounded-lg hover:bg-indigo-600 transition cursor-pointer"
+                                            onClick={handleWhatsAppClick}>
+                                            <div className="text-2xl">💬</div>
+                                            <div>
+                                                <p className="font-semibold">WhatsApp</p>
+                                                <p className="text-sm">{phoneNumber}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-4 p-4 bg-indigo-700 rounded-lg">
+                                            <div className="text-2xl">📍</div>
+                                            <div>
+                                                <p className="font-semibold">Location</p>
+                                                <p className="text-sm">Kisumu, Kenya</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8">
+                                        <h5 className="text-lg font-semibold mb-4 text-yellow-400">Quick Connect</h5>
+                                        <div className="flex gap-4">
+                                            <button
+                                                onClick={handleWhatsAppClick}
+                                                className="flex-1 bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                                            >
+                                                💬 WhatsApp
+                                            </button>
+                                            <button
+                                                onClick={handleEmailClick}
+                                                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                                            >
+                                                📧 Email
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Contact Form */}
+                                <div className="bg-indigo-800 rounded-xl p-8 shadow-lg">
+                                    <h4 className="text-2xl font-bold mb-6 text-yellow-400">Send Message</h4>
+
+                                    <form onSubmit={handleSubmit} className="space-y-6">
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium mb-2">Name *</label>
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    value={formData.name}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                    className="w-full bg-indigo-700 border border-indigo-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                                    placeholder="Your Name"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium mb-2">Email *</label>
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    value={formData.email}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                    className="w-full bg-indigo-700 border border-indigo-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                                    placeholder="your@email.com"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium mb-2">Subject *</label>
+                                            <input
+                                                type="text"
+                                                name="subject"
+                                                value={formData.subject}
+                                                onChange={handleInputChange}
+                                                required
+                                                className="w-full bg-indigo-700 border border-indigo-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                                placeholder="Project Discussion"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium mb-2">Message *</label>
+                                            <textarea
+                                                name="message"
+                                                value={formData.message}
+                                                onChange={handleInputChange}
+                                                required
+                                                rows="5"
+                                                className="w-full bg-indigo-700 border border-indigo-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                                                placeholder="Tell me about your project..."
+                                            ></textarea>
+                                        </div>
+
+                                        <button
+                                            type="submit"
+                                            className="w-full bg-yellow-400 hover:bg-yellow-300 text-indigo-900 py-3 rounded-lg font-semibold transition duration-300"
+                                        >
+                                            Send Message via WhatsApp & Email
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </section>
                     )}
                 </main>
