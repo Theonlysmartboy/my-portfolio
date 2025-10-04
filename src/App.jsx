@@ -134,7 +134,7 @@ export default function App() {
             {/* Sidebar */}
             <aside className="w-80 bg-indigo-900 rounded-r-3xl shadow-xl sticky top-0 h-screen p-8 flex flex-col items-center">
                 <div className="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-yellow-400">
-                    <img src="/profile.jpg" alt="Joseph Odhiambo" className="w-full h-full object-cover" />
+                    <img src="/profile.png" alt="Joseph Odhiambo" className="w-full h-full object-cover" />
                 </div>
                 <h1 className="text-2xl font-bold mb-2 text-yellow-400 text-center">Joseph Odhiambo</h1>
                 <p className="text-yellow-600 mb-4 text-center">Full-Stack Developer</p>
