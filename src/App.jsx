@@ -2,8 +2,72 @@ import React, { useState } from "react";
 
 export default function App() {
     const [currentPage, setCurrentPage] = useState("About");
+    const [activeCategory, setActiveCategory] = useState("All");
 
     const pages = ["About", "Skills", "Experience", "Projects", "Contact"];
+
+    const projectCategories = ["All", "Web Applications", "Mobile Apps", "Management Systems", "E-commerce"];
+
+    const projects = [
+        {
+            id: 1,
+            title: "Payroll Management System",
+            description: "Comprehensive payroll processing system with employee management and reporting features.",
+            category: "Management Systems",
+            image: "/projects/payroll-system.png",
+            technologies: ["Laravel", "Spring Boot", "MySQL", "React"],
+            link: "#"
+        },
+        {
+            id: 2,
+            title: "E-commerce Platform",
+            description: "Full-stack e-commerce solution with inventory management and payment integration.",
+            category: "E-commerce",
+            image: "/projects/ecommerce-platform.jpg",
+            technologies: ["Laravel", "MySQL", "React", "Daraja API", "Ipay API", "PayStack API"],
+            link: "#"
+        },
+        {
+            id: 3,
+            title: "Inventory Tracking App",
+            description: "Mobile application for real-time inventory tracking and management.",
+            category: "Mobile Apps",
+            image: "/projects/inventory-app.png",
+            technologies: ["React Native", "Firebase", "Node.js"],
+            link: "#"
+        },
+        {
+            id: 4,
+            title: "Hospital Management System",
+            description: "Enterprise-level system for patient records, appointments, and medical staff management.",
+            category: "Management Systems",
+            image: "/projects/hospital-system.png",
+            technologies: ["Laravel", "Flutter", "MySQL", "Firebase"],
+            link: "#"
+        },
+        {
+            id: 5,
+            title: "Task Management Dashboard",
+            description: "Collaborative project management tool with real-time updates and team collaboration features.",
+            category: "Web Applications",
+            image: "/projects/task-dashboard.jpg",
+            technologies: ["React", "Node.js", "MongoDB", "Socket.io"],
+            link: "#"
+        },
+        {
+            id: 6,
+            title: "Online Learning Platform",
+            description: "Educational platform with course management, video streaming, and progress tracking.",
+            category: "Web Applications",
+            image: "/projects/learning-platform.jpg",
+            technologies: ["Laravel", "MySQL", "Vue.js", "AWS S3"],
+            link: "#"
+        }
+    ];
+
+    const filteredProjects = activeCategory === "All"
+        ? projects
+        : projects.filter(project => project.category === activeCategory);
 
     return (
         <div className="flex min-h-screen font-sans bg-indigo-950 text-white">
@@ -96,7 +160,7 @@ export default function App() {
                     {currentPage === "Experience" && (
                         <section className="space-y-6">
                             <h3 className="text-2xl font-bold mb-4 text-yellow-400"> 💼 Why Work With Me?</h3>
-                            <p className="text-white">I bridge the gap between business needs and technical execution, crafting solutions that are not only functional but also maintainable and future-proof. Whether it’s a startup MVP or an enterprise-grade system, I transform challenges into seamless digital experiences.</p>
+                            <p className="text-white">I bridge the gap between business needs and technical execution, crafting solutions that are not only functional but also maintainable and future-proof. Whether it's a startup MVP or an enterprise-grade system, I transform challenges into seamless digital experiences.</p>
                             <p>Following are some of my happy clients/employers</p>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-indigo-800 rounded-xl p-6 shadow hover:shadow-lg transition">
@@ -120,19 +184,93 @@ export default function App() {
                     )}
 
                     {currentPage === "Projects" && (
-                        <section className="space-y-6">
-                            <div className="grid md:grid-cols-4 gap-6">
-                                <div className="bg-indigo-800 rounded-xl p-6 shadow hover:shadow-lg transition">
-                                    <h4 className="text-2xl font-semibold text-yellow-600 mb-2">Management Information Systems</h4>
-                                    <ul className="text-white">
-                                        <li>React</li>
-                                    </ul>
-                                    <p className="text-white">React & TailwindCSS portfolio showcasing projects and skills.</p>
-                                </div>
-                                <div className="bg-indigo-800 rounded-xl p-6 shadow hover:shadow-lg transition">
-                                    <h4 className="text-2xl font-semibold text-yellow-600 mb-2">E-commerce Platform</h4>
-                                    <p className="text-white">Laravel-based full-stack e-commerce system.</p>
-                                </div>
+                        <section className="space-y-8">
+                            <div className="text-center">
+                                <h3 className="text-3xl font-bold mb-4 text-yellow-400">🚀 My Projects Gallery</h3>
+                                <p className="text-white max-w-2xl mx-auto">
+                                    Explore my portfolio of projects across different categories. Each project represents unique challenges and innovative solutions.
+                                </p>
+                            </div>
+                            {/* Category Tabs */}
+                            <div className="flex flex-wrap justify-center gap-4 mb-8">
+                                {projectCategories.map((category) => (
+                                    <button
+                                        key={category}
+                                        onClick={() => setActiveCategory(category)}
+                                        className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeCategory === category
+                                                ? "bg-yellow-400 text-indigo-900 shadow-lg"
+                                                : "bg-indigo-700 text-white hover:bg-indigo-600"
+                                            }`}
+                                    >
+                                        {category}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Projects Grid */}
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {filteredProjects.map((project) => (
+                                    <div
+                                        key={project.id}
+                                        className="bg-indigo-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105"
+                                    >
+                                        {/* Project Image with Debug */}
+                                        <div className="h-48 bg-indigo-700 relative overflow-hidden">
+                                            <img
+                                                src={project.image}
+                                                alt={project.title}
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => {
+                                                    console.error(`Failed to load image: ${project.image}`);
+                                                    e.target.style.display = 'none';
+                                                    // Show fallback
+                                                    const fallback = e.target.parentElement.querySelector('.image-fallback');
+                                                    if (fallback) fallback.style.display = 'flex';
+                                                }}
+                                            />
+                                            <div className="image-fallback absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center hidden">
+                                                <div className="text-center">
+                                                    <span className="text-4xl">📁</span>
+                                                    <p className="text-sm mt-2">Image not found</p>
+                                                    <p className="text-xs">{project.image}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Project Content */}
+                                        <div className="p-6">
+                                            <div className="flex justify-between items-start mb-3">
+                                                <h4 className="text-xl font-semibold text-yellow-400">
+                                                    {project.title}
+                                                </h4>
+                                                <span className="bg-indigo-600 text-xs px-2 py-1 rounded-full">
+                                                    {project.category}
+                                                </span>
+                                            </div>
+
+                                            <p className="text-white text-sm mb-4 leading-relaxed">
+                                                {project.description}
+                                            </p>
+
+                                            {/* Technologies */}
+                                            <div className="flex flex-wrap gap-2 mb-4">
+                                                {project.technologies.map((tech, index) => (
+                                                    <span
+                                                        key={index}
+                                                        className="bg-indigo-900 text-yellow-300 text-xs px-2 py-1 rounded"
+                                                    >
+                                                        {tech}
+                                                    </span>
+                                                ))}
+                                            </div>
+
+                                            {/* Action Button */}
+                                            <button className="w-full bg-yellow-400 text-indigo-900 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition">
+                                                View Project Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </section>
                     )}
